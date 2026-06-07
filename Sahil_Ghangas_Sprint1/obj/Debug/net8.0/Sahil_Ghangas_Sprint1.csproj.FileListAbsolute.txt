@@ -1,0 +1,15 @@
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\bin\Debug\net8.0\Sahil_Ghangas_Sprint1.exe
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\bin\Debug\net8.0\Sahil_Ghangas_Sprint1.deps.json
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\bin\Debug\net8.0\Sahil_Ghangas_Sprint1.runtimeconfig.json
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\bin\Debug\net8.0\Sahil_Ghangas_Sprint1.dll
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\bin\Debug\net8.0\Sahil_Ghangas_Sprint1.pdb
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.GeneratedMSBuildEditorConfig.editorconfig
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.AssemblyInfoInputs.cache
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.AssemblyInfo.cs
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.csproj.CoreCompileInputs.cache
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.sourcelink.json
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.dll
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\refint\Sahil_Ghangas_Sprint1.dll
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.pdb
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\Sahil_Ghangas_Sprint1.genruntimeconfig.cache
+D:\Sahil_Ghangas_Sprint1\Sahil_Ghangas_Sprint1\obj\Debug\net8.0\ref\Sahil_Ghangas_Sprint1.dll
