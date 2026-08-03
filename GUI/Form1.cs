@@ -1,82 +1,162 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace GUI
 {
     public partial class Form1 : Form
     {
-        private Customer customer;
-        private Account selectedAccount;
+        private readonly CustomerController controller;
+        private Customer selectedCustomer;
 
         public Form1()
         {
             InitializeComponent();
-            customer = new Customer("CUST001", "John Doe", "john@email.com");
-            LoadAccounts();
+            controller = new CustomerController();
+            LoadCustomers();
         }
 
-        private void LoadAccounts()
+        private void LoadCustomers()
         {
-            comboBoxAccount.Items.Add("Everyday");
-            comboBoxAccount.Items.Add("Investment");
-            comboBoxAccount.Items.Add("Omni");
-            comboBoxAccount.SelectedIndex = 0;
-            ShowAccount(0);
+            listBoxCustomers.Items.Clear();
+            List<Customer> customers = controller.GetCustomers();
+            foreach (Customer customer in customers)
+            {
+                listBoxCustomers.Items.Add($"{customer.CustomerNumber} - {customer.Name}");
+            }
+
+            if (listBoxCustomers.Items.Count > 0)
+            {
+                listBoxCustomers.SelectedIndex = 0;
+            }
+            else
+            {
+                comboBoxAccount.Items.Clear();
+                labelBalanceValue.Text = "$0.00";
+                labelStatus.Text = "Last Status:\r\nNo customer selected";
+                listBoxHistory.Items.Clear();
+            }
+        }
+
+        private void LoadAccountsForSelectedCustomer()
+        {
+            if (selectedCustomer == null)
+            {
+                return;
+            }
+
+            comboBoxAccount.Items.Clear();
+            List<string> accountNames = controller.GetAccountNames(selectedCustomer.CustomerNumber);
+            foreach (string accountName in accountNames)
+            {
+                comboBoxAccount.Items.Add(accountName);
+            }
+
+            if (comboBoxAccount.Items.Count > 0)
+            {
+                comboBoxAccount.SelectedIndex = 0;
+            }
         }
 
         private void comboBoxAccount_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ShowAccount(comboBoxAccount.SelectedIndex);
+            RefreshSelectedAccountDisplay();
         }
 
-        private void ShowAccount(int index)
+        private void listBoxCustomers_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedAccount = customer.Accounts[index];
-            labelBalanceValue.Text = "$" + selectedAccount.Balance.ToString("F2");
-            labelStatus.Text = "Last Status:\r\n" + selectedAccount.LastTransactionStatus;
-            RefreshHistory();
+            if (listBoxCustomers.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            selectedCustomer = controller.GetCustomers()[listBoxCustomers.SelectedIndex];
+            LoadAccountsForSelectedCustomer();
         }
 
-        private void RefreshHistory()
+        private void RefreshSelectedAccountDisplay()
         {
+            if (selectedCustomer == null || comboBoxAccount.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            string accountName = comboBoxAccount.SelectedItem.ToString();
+            labelBalanceValue.Text = "$" + controller.GetBalance(selectedCustomer.CustomerNumber, accountName).ToString("F2");
+            labelStatus.Text = "Last Status:\r\n" + controller.GetLastStatus(selectedCustomer.CustomerNumber, accountName);
+
             listBoxHistory.Items.Clear();
-            foreach (string transaction in selectedAccount.TransactionHistory)
+            foreach (string transaction in controller.GetTransactionHistory(selectedCustomer.CustomerNumber, accountName))
             {
                 listBoxHistory.Items.Add(transaction);
             }
         }
 
-        private void buttonDeposit_Click(object sender, EventArgs e)
+        private bool TryGetAmount(out decimal amount)
         {
-            if (selectedAccount == null) return;
-
-            decimal amount;
+            amount = 0m;
             if (!decimal.TryParse(textBoxAmount.Text, out amount) || amount <= 0)
             {
-                MessageBox.Show("Enter valid amount");
+                MessageBox.Show("Enter valid amount", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool HasSelectedContext()
+        {
+            return selectedCustomer != null && comboBoxAccount.SelectedIndex >= 0;
+        }
+
+        private void buttonDeposit_Click(object sender, EventArgs e)
+        {
+            if (!HasSelectedContext())
+            {
                 return;
             }
 
-            selectedAccount.Deposit(amount);
-            ShowAccount(comboBoxAccount.SelectedIndex);
-            textBoxAmount.Clear();
+            if (!TryGetAmount(out decimal amount))
+            {
+                return;
+            }
+
+            try
+            {
+                controller.Deposit(selectedCustomer.CustomerNumber, comboBoxAccount.SelectedItem.ToString(), amount);
+                RefreshSelectedAccountDisplay();
+                textBoxAmount.Clear();
+            }
+            catch (BankingException ex)
+            {
+                MessageBox.Show(ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonWithdraw_Click(object sender, EventArgs e)
         {
-            if (selectedAccount == null) return;
-
-            decimal amount;
-            if (!decimal.TryParse(textBoxAmount.Text, out amount) || amount <= 0)
+            if (!HasSelectedContext())
             {
-                MessageBox.Show("Enter valid amount");
                 return;
             }
 
-            UserRole role = radioStaff.Checked ? UserRole.BankStaff : UserRole.RegularCustomer;
-            selectedAccount.Withdraw(amount, role);
-            ShowAccount(comboBoxAccount.SelectedIndex);
-            textBoxAmount.Clear();
+            if (!TryGetAmount(out decimal amount))
+            {
+                return;
+            }
+
+            try
+            {
+                UserRole role = radioStaff.Checked ? UserRole.BankStaff : UserRole.RegularCustomer;
+                controller.Withdraw(selectedCustomer.CustomerNumber, comboBoxAccount.SelectedItem.ToString(), amount, role);
+                RefreshSelectedAccountDisplay();
+                textBoxAmount.Clear();
+            }
+            catch (BankingException ex)
+            {
+                MessageBox.Show(ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonWithdrawStaff_Click(object sender, EventArgs e)
@@ -87,26 +167,126 @@ namespace GUI
                 return;
             }
 
-            if (selectedAccount == null) return;
-
-            decimal amount;
-            if (!decimal.TryParse(textBoxAmount.Text, out amount) || amount <= 0)
+            if (!HasSelectedContext())
             {
-                MessageBox.Show("Enter valid amount");
                 return;
             }
 
-            selectedAccount.Withdraw(amount, UserRole.BankStaff);
-            ShowAccount(comboBoxAccount.SelectedIndex);
-            textBoxAmount.Clear();
+            if (!TryGetAmount(out decimal amount))
+            {
+                return;
+            }
+
+            try
+            {
+                controller.Withdraw(selectedCustomer.CustomerNumber, comboBoxAccount.SelectedItem.ToString(), amount, UserRole.BankStaff);
+                RefreshSelectedAccountDisplay();
+                textBoxAmount.Clear();
+            }
+            catch (BankingException ex)
+            {
+                MessageBox.Show(ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void buttonInterest_Click(object sender, EventArgs e)
         {
-            if (selectedAccount == null) return;
+            if (!HasSelectedContext())
+            {
+                return;
+            }
 
-            selectedAccount.CalculateInterest();
-            ShowAccount(comboBoxAccount.SelectedIndex);
+            controller.CalculateInterest(selectedCustomer.CustomerNumber, comboBoxAccount.SelectedItem.ToString());
+            RefreshSelectedAccountDisplay();
+        }
+
+        private void buttonAddCustomer_Click(object sender, EventArgs e)
+        {
+            using (var editor = new CustomerEditorForm("Add Customer"))
+            {
+                if (editor.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    Customer created = controller.AddCustomer(editor.CustomerNumberValue, editor.CustomerNameValue, editor.CustomerContactValue);
+                    LoadCustomers();
+                    SelectCustomer(created.CustomerNumber);
+                }
+                catch (BankingException ex)
+                {
+                    MessageBox.Show(ex.Message, "Customer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void buttonEditCustomer_Click(object sender, EventArgs e)
+        {
+            if (selectedCustomer == null)
+            {
+                return;
+            }
+
+            using (var editor = new CustomerEditorForm("Modify Customer", selectedCustomer))
+            {
+                if (editor.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    controller.UpdateCustomer(selectedCustomer.CustomerNumber, editor.CustomerNameValue, editor.CustomerContactValue);
+                    LoadCustomers();
+                    SelectCustomer(selectedCustomer.CustomerNumber);
+                }
+                catch (BankingException ex)
+                {
+                    MessageBox.Show(ex.Message, "Customer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void buttonDeleteCustomer_Click(object sender, EventArgs e)
+        {
+            if (selectedCustomer == null)
+            {
+                return;
+            }
+
+            DialogResult confirm = MessageBox.Show(
+                $"Delete customer {selectedCustomer.CustomerNumber} - {selectedCustomer.Name}?",
+                "Delete Customer",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (confirm != DialogResult.Yes)
+            {
+                return;
+            }
+
+            try
+            {
+                controller.DeleteCustomer(selectedCustomer.CustomerNumber);
+                selectedCustomer = null;
+                LoadCustomers();
+            }
+            catch (BankingException ex)
+            {
+                MessageBox.Show(ex.Message, "Customer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void SelectCustomer(string customerNumber)
+        {
+            List<Customer> customers = controller.GetCustomers();
+            int selectedIndex = customers.FindIndex(c => c.CustomerNumber.Equals(customerNumber, StringComparison.OrdinalIgnoreCase));
+            if (selectedIndex >= 0)
+            {
+                listBoxCustomers.SelectedIndex = selectedIndex;
+            }
         }
     }
 }

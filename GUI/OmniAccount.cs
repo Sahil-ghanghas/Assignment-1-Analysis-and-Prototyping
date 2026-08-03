@@ -33,8 +33,7 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Deposit Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Deposit amount must be greater than zero.");
             }
 
             balance += amount;
@@ -47,8 +46,7 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Withdrawal Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Withdrawal amount must be greater than zero.");
             }
 
             // Check if withdrawal exceeds balance + overdraft limit

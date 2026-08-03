@@ -34,6 +34,11 @@
             this.buttonInterest = new System.Windows.Forms.Button();
             this.labelStatus = new System.Windows.Forms.Label();
             this.panelRight = new System.Windows.Forms.Panel();
+            this.buttonDeleteCustomer = new System.Windows.Forms.Button();
+            this.buttonEditCustomer = new System.Windows.Forms.Button();
+            this.buttonAddCustomer = new System.Windows.Forms.Button();
+            this.listBoxCustomers = new System.Windows.Forms.ListBox();
+            this.labelCustomers = new System.Windows.Forms.Label();
             this.labelHistory = new System.Windows.Forms.Label();
             this.listBoxHistory = new System.Windows.Forms.ListBox();
             this.panelHeader.SuspendLayout();
@@ -245,6 +250,11 @@
             // panelRight - Transaction History
             this.panelRight.BackColor = System.Drawing.Color.White;
             this.panelRight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelRight.Controls.Add(this.buttonDeleteCustomer);
+            this.panelRight.Controls.Add(this.buttonEditCustomer);
+            this.panelRight.Controls.Add(this.buttonAddCustomer);
+            this.panelRight.Controls.Add(this.listBoxCustomers);
+            this.panelRight.Controls.Add(this.labelCustomers);
             this.panelRight.Controls.Add(this.labelHistory);
             this.panelRight.Controls.Add(this.listBoxHistory);
             this.panelRight.Location = new System.Drawing.Point(290, 80);
@@ -252,11 +262,70 @@
             this.panelRight.Size = new System.Drawing.Size(540, 490);
             this.panelRight.TabIndex = 2;
 
+            // buttonDeleteCustomer
+            this.buttonDeleteCustomer.BackColor = System.Drawing.Color.FromArgb(198, 40, 40);
+            this.buttonDeleteCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonDeleteCustomer.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.buttonDeleteCustomer.ForeColor = System.Drawing.Color.White;
+            this.buttonDeleteCustomer.Location = new System.Drawing.Point(385, 118);
+            this.buttonDeleteCustomer.Name = "buttonDeleteCustomer";
+            this.buttonDeleteCustomer.Size = new System.Drawing.Size(140, 28);
+            this.buttonDeleteCustomer.TabIndex = 6;
+            this.buttonDeleteCustomer.Text = "Delete Customer";
+            this.buttonDeleteCustomer.UseVisualStyleBackColor = false;
+            this.buttonDeleteCustomer.Click += new System.EventHandler(this.buttonDeleteCustomer_Click);
+
+            // buttonEditCustomer
+            this.buttonEditCustomer.BackColor = System.Drawing.Color.FromArgb(255, 152, 0);
+            this.buttonEditCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonEditCustomer.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.buttonEditCustomer.ForeColor = System.Drawing.Color.White;
+            this.buttonEditCustomer.Location = new System.Drawing.Point(385, 84);
+            this.buttonEditCustomer.Name = "buttonEditCustomer";
+            this.buttonEditCustomer.Size = new System.Drawing.Size(140, 28);
+            this.buttonEditCustomer.TabIndex = 5;
+            this.buttonEditCustomer.Text = "Modify Customer";
+            this.buttonEditCustomer.UseVisualStyleBackColor = false;
+            this.buttonEditCustomer.Click += new System.EventHandler(this.buttonEditCustomer_Click);
+
+            // buttonAddCustomer
+            this.buttonAddCustomer.BackColor = System.Drawing.Color.FromArgb(76, 175, 80);
+            this.buttonAddCustomer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonAddCustomer.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Bold);
+            this.buttonAddCustomer.ForeColor = System.Drawing.Color.White;
+            this.buttonAddCustomer.Location = new System.Drawing.Point(385, 50);
+            this.buttonAddCustomer.Name = "buttonAddCustomer";
+            this.buttonAddCustomer.Size = new System.Drawing.Size(140, 28);
+            this.buttonAddCustomer.TabIndex = 4;
+            this.buttonAddCustomer.Text = "Add Customer";
+            this.buttonAddCustomer.UseVisualStyleBackColor = false;
+            this.buttonAddCustomer.Click += new System.EventHandler(this.buttonAddCustomer_Click);
+
+            // listBoxCustomers
+            this.listBoxCustomers.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.listBoxCustomers.FormattingEnabled = true;
+            this.listBoxCustomers.ItemHeight = 15;
+            this.listBoxCustomers.Location = new System.Drawing.Point(15, 50);
+            this.listBoxCustomers.Name = "listBoxCustomers";
+            this.listBoxCustomers.Size = new System.Drawing.Size(350, 94);
+            this.listBoxCustomers.TabIndex = 3;
+            this.listBoxCustomers.SelectedIndexChanged += new System.EventHandler(this.listBoxCustomers_SelectedIndexChanged);
+
+            // labelCustomers
+            this.labelCustomers.AutoSize = true;
+            this.labelCustomers.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
+            this.labelCustomers.ForeColor = System.Drawing.Color.FromArgb(15, 32, 66);
+            this.labelCustomers.Location = new System.Drawing.Point(15, 18);
+            this.labelCustomers.Name = "labelCustomers";
+            this.labelCustomers.Size = new System.Drawing.Size(139, 20);
+            this.labelCustomers.TabIndex = 2;
+            this.labelCustomers.Text = "Customer Records";
+
             // labelHistory
             this.labelHistory.AutoSize = true;
             this.labelHistory.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Bold);
             this.labelHistory.ForeColor = System.Drawing.Color.FromArgb(15, 32, 66);
-            this.labelHistory.Location = new System.Drawing.Point(15, 15);
+            this.labelHistory.Location = new System.Drawing.Point(15, 165);
             this.labelHistory.Name = "labelHistory";
             this.labelHistory.Size = new System.Drawing.Size(160, 20);
             this.labelHistory.TabIndex = 0;
@@ -264,9 +333,9 @@
 
             // listBoxHistory
             this.listBoxHistory.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.listBoxHistory.Location = new System.Drawing.Point(15, 40);
+            this.listBoxHistory.Location = new System.Drawing.Point(15, 190);
             this.listBoxHistory.Name = "listBoxHistory";
-            this.listBoxHistory.Size = new System.Drawing.Size(510, 430);
+            this.listBoxHistory.Size = new System.Drawing.Size(510, 289);
             this.listBoxHistory.TabIndex = 1;
 
             // Form1
@@ -311,6 +380,11 @@
         private System.Windows.Forms.Button buttonInterest;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.Panel panelRight;
+        private System.Windows.Forms.Button buttonDeleteCustomer;
+        private System.Windows.Forms.Button buttonEditCustomer;
+        private System.Windows.Forms.Button buttonAddCustomer;
+        private System.Windows.Forms.ListBox listBoxCustomers;
+        private System.Windows.Forms.Label labelCustomers;
         private System.Windows.Forms.Label labelHistory;
         private System.Windows.Forms.ListBox listBoxHistory;
     }

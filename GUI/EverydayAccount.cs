@@ -14,8 +14,7 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Deposit Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Deposit amount must be greater than zero.");
             }
 
             balance += amount;
@@ -28,15 +27,12 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Withdrawal Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Withdrawal amount must be greater than zero.");
             }
 
             if (balance < amount)
             {
-                lastTransactionStatus = "Withdrawal Failed - Insufficient Funds";
-                transactionHistory.Add($"Failed Withdrawal: -${amount}, Balance: ${balance}");
-                return false;
+                throw new InsufficientFundsException("Withdrawal failed due to insufficient funds.");
             }
 
             balance -= amount;

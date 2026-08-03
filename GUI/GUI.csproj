@@ -58,6 +58,9 @@
     <Compile Include="InvestmentAccount.cs" />
     <Compile Include="OmniAccount.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="CustomerController.cs" />
+    <Compile Include="CustomerEditorForm.cs" />
+    <Compile Include="BankingExceptions.cs" />
     <Compile Include="UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
