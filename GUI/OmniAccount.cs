@@ -63,7 +63,7 @@ namespace GUI
                 balance -= actualFee;
                 lastTransactionStatus = $"Withdrawal Failed - Exceeds Available Funds. Fee Applied: -${actualFee:F2}";
                 transactionHistory.Add($"Failed Withdrawal: -${amount}, Fee: -${actualFee:F2}, Balance: ${balance}");
-                return false;
+                throw new InsufficientFundsException($"Omni account withdrawal failed. Requested ${amount:F2}, available including overdraft ${availableFunds:F2}. Failure fee ${actualFee:F2} has been applied.");
             }
 
             balance -= amount;

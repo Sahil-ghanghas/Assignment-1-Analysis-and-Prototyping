@@ -32,7 +32,9 @@ namespace GUI
 
             if (balance < amount)
             {
-                throw new InsufficientFundsException("Withdrawal failed due to insufficient funds.");
+                lastTransactionStatus = "Withdrawal Failed - Insufficient Funds (Everyday)";
+                transactionHistory.Add($"Failed Withdrawal: -${amount}, Balance: ${balance}");
+                throw new InsufficientFundsException($"Everyday account withdrawal failed. Requested ${amount:F2}, available ${balance:F2}. No overdraft is allowed on Everyday accounts.");
             }
 
             balance -= amount;

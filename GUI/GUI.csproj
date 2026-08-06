@@ -59,7 +59,9 @@
     <Compile Include="OmniAccount.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerController.cs" />
-    <Compile Include="CustomerEditorForm.cs" />
+    <Compile Include="CustomerEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="BankingExceptions.cs" />
     <Compile Include="UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

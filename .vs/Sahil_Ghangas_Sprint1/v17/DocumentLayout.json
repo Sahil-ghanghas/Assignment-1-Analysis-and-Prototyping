@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "GUI\\Form1.Designer.cs",
               "ToolTip": "D:\\Sahil_Ghangas_Sprint1\\GUI\\Form1.Designer.cs",
               "RelativeToolTip": "GUI\\Form1.Designer.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAQwBIAAAA/AAAAAAAAAA==",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwBUAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-06-08T13:56:05.275Z",
               "EditorCaption": ""
@@ -62,7 +62,8 @@
               "RelativeToolTip": "Sahil_Ghangas_Sprint1\\Account.cs",
               "ViewState": "AgIAACoAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-07T03:45:26.225Z"
+              "WhenOpened": "2026-06-07T03:45:26.225Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -74,7 +75,8 @@
               "RelativeToolTip": "Sahil_Ghangas_Sprint1\\Program.cs",
               "ViewState": "AgIAAA8AAAAAAAAAAAAAAAMAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-03T07:33:27.757Z"
+              "WhenOpened": "2026-06-03T07:33:27.757Z",
+              "EditorCaption": ""
             }
           ]
         }

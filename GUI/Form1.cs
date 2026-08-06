@@ -155,6 +155,7 @@ namespace GUI
             }
             catch (BankingException ex)
             {
+                RefreshSelectedAccountDisplay();
                 MessageBox.Show(ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -185,6 +186,7 @@ namespace GUI
             }
             catch (BankingException ex)
             {
+                RefreshSelectedAccountDisplay();
                 MessageBox.Show(ex.Message, "Transaction Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
