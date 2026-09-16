@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace GUI
 {
@@ -10,6 +11,12 @@ namespace GUI
         private decimal failureFee;
         private decimal interestThreshold; // $1000
 
+        public OmniAccount() : base()
+        {
+            failureFee = 15;
+            interestThreshold = 1000;
+        }
+
         public OmniAccount(string name, decimal initialBalance, decimal rate, decimal overdraft) 
             : base(name, initialBalance)
         {
@@ -19,14 +26,18 @@ namespace GUI
             interestThreshold = 1000;
         }
 
+        [JsonInclude]
         public decimal InterestRate
         {
             get { return interestRate; }
+            protected set { interestRate = value; }
         }
 
+        [JsonInclude]
         public decimal OverdraftLimit
         {
             get { return overdraftLimit; }
+            protected set { overdraftLimit = value; }
         }
 
         public override bool Deposit(decimal amount)

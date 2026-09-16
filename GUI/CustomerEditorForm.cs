@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace GUI
 {
-    public class CustomerEditorForm : Form
+    public class CustomerEditorForm : BaseForm
     {
         private readonly TextBox textBoxCustomerNumber;
         private readonly TextBox textBoxName;
@@ -35,26 +35,9 @@ namespace GUI
             MinimizeBox = false;
             StartPosition = FormStartPosition.CenterParent;
             ClientSize = new Size(430, 235);
-            BackColor = Color.FromArgb(250, 250, 250);
-            Font = new Font("Segoe UI", 9F);
-
-            var panelHeader = new Panel
-            {
-                BackColor = Color.FromArgb(15, 32, 66),
-                Dock = DockStyle.Top,
-                Height = 55
-            };
-
-            var labelTitle = new Label
-            {
-                Text = title,
-                ForeColor = Color.White,
-                Font = new Font("Segoe UI", 14F, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(16, 14)
-            };
-
-            panelHeader.Controls.Add(labelTitle);
+            
+            // Use BaseForm's header
+            labelSubtitle.Text = title;
 
             var labelNumber = new Label { Text = "Customer Number", AutoSize = true, Location = new Point(20, 72) };
             var labelName = new Label { Text = "Full Name", AutoSize = true, Location = new Point(20, 112) };
@@ -87,7 +70,6 @@ namespace GUI
             buttonSave.Click += ButtonSave_Click;
             buttonCancel.Click += delegate { DialogResult = DialogResult.Cancel; Close(); };
 
-            Controls.Add(panelHeader);
             Controls.Add(labelNumber);
             Controls.Add(labelName);
             Controls.Add(labelContact);

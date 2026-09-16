@@ -15,6 +15,9 @@
 
   <ItemGroup>
     <Compile Include="AccountLogicTests.cs" />
+    <Compile Include="..\GUI\AccountConverter.cs">
+      <Link>Banking\AccountConverter.cs</Link>
+    </Compile>
     <Compile Include="..\GUI\Account.cs">
       <Link>Banking\Account.cs</Link>
     </Compile>

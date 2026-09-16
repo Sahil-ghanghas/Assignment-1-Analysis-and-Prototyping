@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace GUI
 {
-    public partial class Form1 : Form
+    public partial class Form1 : BaseForm
     {
         private readonly CustomerController controller;
         private Customer selectedCustomer;
@@ -14,7 +14,17 @@ namespace GUI
         {
             InitializeComponent();
             controller = new CustomerController();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            controller.LoadData("bank_data.json");
             LoadCustomers();
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            controller.SaveData("bank_data.json");
         }
 
         private void LoadCustomers()
@@ -33,9 +43,12 @@ namespace GUI
             else
             {
                 comboBoxAccount.Items.Clear();
+                comboBoxSource.Items.Clear();
+                comboBoxDest.Items.Clear();
                 labelBalanceValue.Text = "$0.00";
                 labelStatus.Text = "Last Status:\r\nNo customer selected";
                 listBoxHistory.Items.Clear();
+                selectedCustomer = null;
             }
         }
 
@@ -47,10 +60,15 @@ namespace GUI
             }
 
             comboBoxAccount.Items.Clear();
+            comboBoxSource.Items.Clear();
+            comboBoxDest.Items.Clear();
+
             List<string> accountNames = controller.GetAccountNames(selectedCustomer.CustomerNumber);
             foreach (string accountName in accountNames)
             {
                 comboBoxAccount.Items.Add(accountName);
+                comboBoxSource.Items.Add(accountName);
+                comboBoxDest.Items.Add(accountName);
             }
 
             if (comboBoxAccount.Items.Count > 0)
@@ -93,10 +111,10 @@ namespace GUI
             }
         }
 
-        private bool TryGetAmount(out decimal amount)
+        private bool TryGetAmount(out decimal amount, TextBox textBox)
         {
             amount = 0m;
-            if (!decimal.TryParse(textBoxAmount.Text, out amount) || amount <= 0)
+            if (!decimal.TryParse(textBox.Text, out amount) || amount <= 0)
             {
                 MessageBox.Show("Enter valid amount", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
@@ -112,15 +130,7 @@ namespace GUI
 
         private void buttonDeposit_Click(object sender, EventArgs e)
         {
-            if (!HasSelectedContext())
-            {
-                return;
-            }
-
-            if (!TryGetAmount(out decimal amount))
-            {
-                return;
-            }
+            if (!HasSelectedContext() || !TryGetAmount(out decimal amount, textBoxAmount)) return;
 
             try
             {
@@ -136,15 +146,7 @@ namespace GUI
 
         private void buttonWithdraw_Click(object sender, EventArgs e)
         {
-            if (!HasSelectedContext())
-            {
-                return;
-            }
-
-            if (!TryGetAmount(out decimal amount))
-            {
-                return;
-            }
+            if (!HasSelectedContext() || !TryGetAmount(out decimal amount, textBoxAmount)) return;
 
             try
             {
@@ -168,15 +170,7 @@ namespace GUI
                 return;
             }
 
-            if (!HasSelectedContext())
-            {
-                return;
-            }
-
-            if (!TryGetAmount(out decimal amount))
-            {
-                return;
-            }
+            if (!HasSelectedContext() || !TryGetAmount(out decimal amount, textBoxAmount)) return;
 
             try
             {
@@ -193,24 +187,66 @@ namespace GUI
 
         private void buttonInterest_Click(object sender, EventArgs e)
         {
-            if (!HasSelectedContext())
+            if (!HasSelectedContext()) return;
+            controller.CalculateInterest(selectedCustomer.CustomerNumber, comboBoxAccount.SelectedItem.ToString());
+            RefreshSelectedAccountDisplay();
+        }
+
+        private void buttonTransfer_Click(object sender, EventArgs e)
+        {
+            if (selectedCustomer == null || comboBoxSource.SelectedIndex < 0 || comboBoxDest.SelectedIndex < 0)
             {
+                MessageBox.Show("Select source and destination accounts.", "Validation");
                 return;
             }
 
-            controller.CalculateInterest(selectedCustomer.CustomerNumber, comboBoxAccount.SelectedItem.ToString());
-            RefreshSelectedAccountDisplay();
+            if (comboBoxSource.SelectedIndex == comboBoxDest.SelectedIndex)
+            {
+                MessageBox.Show("Source and destination accounts must be different.", "Validation");
+                return;
+            }
+
+            if (!TryGetAmount(out decimal amount, textBoxTransferAmount)) return;
+
+            try
+            {
+                string src = comboBoxSource.SelectedItem.ToString();
+                string dest = comboBoxDest.SelectedItem.ToString();
+                
+                // Temporary role swap just for testing staff transfer fee if staff is selected
+                if (radioStaff.Checked) selectedCustomer.Role = UserRole.BankStaff;
+                else selectedCustomer.Role = UserRole.RegularCustomer;
+
+                controller.Transfer(selectedCustomer.CustomerNumber, src, dest, amount);
+                RefreshSelectedAccountDisplay();
+                textBoxTransferAmount.Clear();
+                MessageBox.Show("Transfer Successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (BankingException ex)
+            {
+                RefreshSelectedAccountDisplay();
+                MessageBox.Show(ex.Message, "Transfer Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonAddNewAccount_Click(object sender, EventArgs e)
+        {
+            if (selectedCustomer == null) return;
+            
+            // Simple prompt for account creation (could use a dedicated form but a quick MessageBox-like choice is okay, 
+            // since we need to select an account type. We will just add an Everyday account by default, or maybe prompt).
+            // For simplicity, let's just add an Everyday Account named "Everyday #"
+            int count = selectedCustomer.Accounts.Count + 1;
+            controller.AddAccount(selectedCustomer.CustomerNumber, new EverydayAccount($"Everyday {count}", 0));
+            LoadAccountsForSelectedCustomer();
+            MessageBox.Show($"New Everyday Account Added!", "Success");
         }
 
         private void buttonAddCustomer_Click(object sender, EventArgs e)
         {
             using (var editor = new CustomerEditorForm("Add Customer"))
             {
-                if (editor.ShowDialog(this) != DialogResult.OK)
-                {
-                    return;
-                }
-
+                if (editor.ShowDialog(this) != DialogResult.OK) return;
                 try
                 {
                     Customer created = controller.AddCustomer(editor.CustomerNumberValue, editor.CustomerNameValue, editor.CustomerContactValue);
@@ -226,18 +262,10 @@ namespace GUI
 
         private void buttonEditCustomer_Click(object sender, EventArgs e)
         {
-            if (selectedCustomer == null)
-            {
-                return;
-            }
-
+            if (selectedCustomer == null) return;
             using (var editor = new CustomerEditorForm("Modify Customer", selectedCustomer))
             {
-                if (editor.ShowDialog(this) != DialogResult.OK)
-                {
-                    return;
-                }
-
+                if (editor.ShowDialog(this) != DialogResult.OK) return;
                 try
                 {
                     controller.UpdateCustomer(selectedCustomer.CustomerNumber, editor.CustomerNameValue, editor.CustomerContactValue);
@@ -253,21 +281,13 @@ namespace GUI
 
         private void buttonDeleteCustomer_Click(object sender, EventArgs e)
         {
-            if (selectedCustomer == null)
-            {
-                return;
-            }
+            if (selectedCustomer == null) return;
 
             DialogResult confirm = MessageBox.Show(
                 $"Delete customer {selectedCustomer.CustomerNumber} - {selectedCustomer.Name}?",
-                "Delete Customer",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Warning);
+                "Delete Customer", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (confirm != DialogResult.Yes)
-            {
-                return;
-            }
+            if (confirm != DialogResult.Yes) return;
 
             try
             {

@@ -5,6 +5,10 @@ namespace GUI
     // Everyday Account - No interest, no overdraft, no fees
     public class EverydayAccount : Account
     {
+        public EverydayAccount() : base()
+        {
+        }
+
         public EverydayAccount(string name, decimal initialBalance) 
             : base(name, initialBalance)
         {

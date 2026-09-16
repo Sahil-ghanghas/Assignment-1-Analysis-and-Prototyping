@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace GUI
 {
@@ -8,6 +9,11 @@ namespace GUI
         private decimal interestRate;
         private decimal failureFee;
 
+        public InvestmentAccount() : base()
+        {
+            failureFee = 10;
+        }
+
         public InvestmentAccount(string name, decimal initialBalance, decimal rate) 
             : base(name, initialBalance)
         {
@@ -15,9 +21,11 @@ namespace GUI
             failureFee = 10; // $10 fee for failed transaction
         }
 
+        [JsonInclude]
         public decimal InterestRate
         {
             get { return interestRate; }
+            protected set { interestRate = value; }
         }
 
         public override bool Deposit(decimal amount)

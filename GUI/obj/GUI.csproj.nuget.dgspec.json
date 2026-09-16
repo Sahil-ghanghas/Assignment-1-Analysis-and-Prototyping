@@ -1,0 +1,58 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\Sahil_Ghangas_Sprint(2)\\Sahil_Ghangas_Sprint1\\GUI\\GUI.csproj": {}
+  },
+  "projects": {
+    "D:\\Sahil_Ghangas_Sprint(2)\\Sahil_Ghangas_Sprint1\\GUI\\GUI.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\Sahil_Ghangas_Sprint(2)\\Sahil_Ghangas_Sprint1\\GUI\\GUI.csproj",
+        "projectName": "GUI",
+        "projectPath": "D:\\Sahil_Ghangas_Sprint(2)\\Sahil_Ghangas_Sprint1\\GUI\\GUI.csproj",
+        "packagesPath": "C:\\Users\\Yoga\\.nuget\\packages\\",
+        "outputPath": "D:\\Sahil_Ghangas_Sprint(2)\\Sahil_Ghangas_Sprint1\\GUI\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Yoga\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net472"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net472": {
+            "framework": "net472",
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net472": {
+          "framework": "net472",
+          "dependencies": {
+            "System.Text.Json": {
+              "target": "Package",
+              "version": "[7.0.3, )"
+            }
+          }
+        }
+      }
+    }
+  }
+}

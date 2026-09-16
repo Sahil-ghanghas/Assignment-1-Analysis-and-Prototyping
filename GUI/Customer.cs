@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace GUI
 {
@@ -10,7 +11,12 @@ namespace GUI
         private string contactDetails;
         private List<Account> accounts;
 
-        public Customer(string custNumber, string custName, string contact)
+        public Customer()
+        {
+            accounts = new List<Account>();
+        }
+
+        public Customer(string custNumber, string custName, string contact, UserRole role = UserRole.RegularCustomer)
         {
             if (string.IsNullOrWhiteSpace(custNumber))
             {
@@ -35,26 +41,37 @@ namespace GUI
             accounts.Add(new EverydayAccount("Everyday", 1000));
             accounts.Add(new InvestmentAccount("Investment", 5000, 0.05m));
             accounts.Add(new OmniAccount("Omni", 2000, 0.03m, 500));
+            Role = role;
         }
 
+        public UserRole Role { get; set; }
+
+        [JsonInclude]
         public string CustomerNumber
         {
             get { return customerNumber; }
+            protected set { customerNumber = value; }
         }
 
+        [JsonInclude]
         public string Name
         {
             get { return name; }
+            protected set { name = value; }
         }
 
+        [JsonInclude]
         public string ContactDetails
         {
             get { return contactDetails; }
+            protected set { contactDetails = value; }
         }
 
+        [JsonInclude]
         public List<Account> Accounts
         {
             get { return accounts; }
+            protected set { accounts = value; }
         }
 
         public void AddAccount(Account account)
