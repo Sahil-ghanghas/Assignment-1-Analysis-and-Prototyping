@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace GUI
 {
@@ -11,6 +12,14 @@ namespace GUI
         protected string lastTransactionStatus;
         protected List<string> transactionHistory;
 
+        // Parameterless constructor for JSON serialization
+        protected Account() 
+        { 
+            transactionHistory = new List<string>();
+            lastTransactionStatus = "Account Created";
+            accountName = "";
+        }
+
         public Account(string name, decimal initialBalance)
         {
             accountName = name;
@@ -21,24 +30,32 @@ namespace GUI
         }
 
         // Properties
+        [JsonInclude]
         public decimal Balance
         {
             get { return balance; }
+            protected set { balance = value; }
         }
 
+        [JsonInclude]
         public string AccountName
         {
             get { return accountName; }
+            protected set { accountName = value; }
         }
 
+        [JsonInclude]
         public string LastTransactionStatus
         {
             get { return lastTransactionStatus; }
+            protected set { lastTransactionStatus = value; }
         }
 
+        [JsonInclude]
         public List<string> TransactionHistory
         {
             get { return transactionHistory; }
+            protected set { transactionHistory = value; }
         }
 
         // Abstract methods that child classes must implement

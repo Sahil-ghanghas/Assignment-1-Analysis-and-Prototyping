@@ -5,6 +5,10 @@ namespace GUI
     // Everyday Account - No interest, no overdraft, no fees
     public class EverydayAccount : Account
     {
+        public EverydayAccount() : base()
+        {
+        }
+
         public EverydayAccount(string name, decimal initialBalance) 
             : base(name, initialBalance)
         {
@@ -14,8 +18,7 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Deposit Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Deposit amount must be greater than zero.");
             }
 
             balance += amount;
@@ -28,15 +31,14 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Withdrawal Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Withdrawal amount must be greater than zero.");
             }
 
             if (balance < amount)
             {
-                lastTransactionStatus = "Withdrawal Failed - Insufficient Funds";
+                lastTransactionStatus = "Withdrawal Failed - Insufficient Funds (Everyday)";
                 transactionHistory.Add($"Failed Withdrawal: -${amount}, Balance: ${balance}");
-                return false;
+                throw new InsufficientFundsException($"Everyday account withdrawal failed. Requested ${amount:F2}, available ${balance:F2}. No overdraft is allowed on Everyday accounts.");
             }
 
             balance -= amount;

@@ -1,0 +1,101 @@
+[
+  {
+    "Role": 0,
+    "CustomerNumber": "CUST001",
+    "Name": "John Doe",
+    "ContactDetails": "john@email.com",
+    "Accounts": [
+      {
+        "AccountType": "Everyday",
+        "Balance": 1000,
+        "AccountName": "Everyday",
+        "LastTransactionStatus": "Account Created",
+        "TransactionHistory": [
+          "Account opened with balance: $1000"
+        ]
+      },
+      {
+        "AccountType": "Investment",
+        "InterestRate": 0.05,
+        "Balance": 5000,
+        "AccountName": "Investment",
+        "LastTransactionStatus": "Account Created",
+        "TransactionHistory": [
+          "Account opened with balance: $5000"
+        ]
+      },
+      {
+        "AccountType": "Omni",
+        "InterestRate": 0.03,
+        "OverdraftLimit": 500,
+        "Balance": 2000,
+        "AccountName": "Omni",
+        "LastTransactionStatus": "Account Created",
+        "TransactionHistory": [
+          "Account opened with balance: $2000"
+        ]
+      },
+      {
+        "AccountType": "Everyday",
+        "Balance": 0,
+        "AccountName": "Everyday 4",
+        "LastTransactionStatus": "Account Created",
+        "TransactionHistory": [
+          "Account opened with balance: $0"
+        ]
+      },
+      {
+        "AccountType": "Everyday",
+        "Balance": 0,
+        "AccountName": "Everyday 5",
+        "LastTransactionStatus": "Account Created",
+        "TransactionHistory": [
+          "Account opened with balance: $0"
+        ]
+      }
+    ]
+  },
+  {
+    "Role": 0,
+    "CustomerNumber": "123",
+    "Name": "Sahil Ghannas",
+    "ContactDetails": "11321321",
+    "Accounts": [
+      {
+        "AccountType": "Everyday",
+        "Balance": 9500,
+        "AccountName": "Everyday",
+        "LastTransactionStatus": "Withdrawal Successful: -$500",
+        "TransactionHistory": [
+          "Account opened with balance: $1000",
+          "Withdrawal: -$1000, New Balance: $0",
+          "Deposit: \u002B$10000, New Balance: $10000",
+          "Withdrawal: -$500, New Balance: $9500"
+        ]
+      },
+      {
+        "AccountType": "Investment",
+        "InterestRate": 0.05,
+        "Balance": 6500,
+        "AccountName": "Investment",
+        "LastTransactionStatus": "Deposit Successful: \u002B$500",
+        "TransactionHistory": [
+          "Account opened with balance: $5000",
+          "Deposit: \u002B$1000, New Balance: $6000",
+          "Deposit: \u002B$500, New Balance: $6500"
+        ]
+      },
+      {
+        "AccountType": "Omni",
+        "InterestRate": 0.03,
+        "OverdraftLimit": 500,
+        "Balance": 2000,
+        "AccountName": "Omni",
+        "LastTransactionStatus": "Account Created",
+        "TransactionHistory": [
+          "Account opened with balance: $2000"
+        ]
+      }
+    ]
+  }
+]

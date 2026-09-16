@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace GUI
 {
@@ -10,6 +11,12 @@ namespace GUI
         private decimal failureFee;
         private decimal interestThreshold; // $1000
 
+        public OmniAccount() : base()
+        {
+            failureFee = 15;
+            interestThreshold = 1000;
+        }
+
         public OmniAccount(string name, decimal initialBalance, decimal rate, decimal overdraft) 
             : base(name, initialBalance)
         {
@@ -19,22 +26,25 @@ namespace GUI
             interestThreshold = 1000;
         }
 
+        [JsonInclude]
         public decimal InterestRate
         {
             get { return interestRate; }
+            protected set { interestRate = value; }
         }
 
+        [JsonInclude]
         public decimal OverdraftLimit
         {
             get { return overdraftLimit; }
+            protected set { overdraftLimit = value; }
         }
 
         public override bool Deposit(decimal amount)
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Deposit Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Deposit amount must be greater than zero.");
             }
 
             balance += amount;
@@ -47,8 +57,7 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Withdrawal Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Withdrawal amount must be greater than zero.");
             }
 
             // Check if withdrawal exceeds balance + overdraft limit
@@ -65,7 +74,7 @@ namespace GUI
                 balance -= actualFee;
                 lastTransactionStatus = $"Withdrawal Failed - Exceeds Available Funds. Fee Applied: -${actualFee:F2}";
                 transactionHistory.Add($"Failed Withdrawal: -${amount}, Fee: -${actualFee:F2}, Balance: ${balance}");
-                return false;
+                throw new InsufficientFundsException($"Omni account withdrawal failed. Requested ${amount:F2}, available including overdraft ${availableFunds:F2}. Failure fee ${actualFee:F2} has been applied.");
             }
 
             balance -= amount;

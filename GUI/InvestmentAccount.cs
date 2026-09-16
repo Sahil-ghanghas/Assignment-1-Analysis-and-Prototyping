@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace GUI
 {
@@ -8,6 +9,11 @@ namespace GUI
         private decimal interestRate;
         private decimal failureFee;
 
+        public InvestmentAccount() : base()
+        {
+            failureFee = 10;
+        }
+
         public InvestmentAccount(string name, decimal initialBalance, decimal rate) 
             : base(name, initialBalance)
         {
@@ -15,17 +21,18 @@ namespace GUI
             failureFee = 10; // $10 fee for failed transaction
         }
 
+        [JsonInclude]
         public decimal InterestRate
         {
             get { return interestRate; }
+            protected set { interestRate = value; }
         }
 
         public override bool Deposit(decimal amount)
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Deposit Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Deposit amount must be greater than zero.");
             }
 
             balance += amount;
@@ -38,8 +45,7 @@ namespace GUI
         {
             if (amount <= 0)
             {
-                lastTransactionStatus = "Withdrawal Failed - Invalid Amount";
-                return false;
+                throw new InvalidTransactionException("Withdrawal amount must be greater than zero.");
             }
 
             // No overdraft allowed - must have enough funds
@@ -55,7 +61,7 @@ namespace GUI
                 balance -= actualFee;
                 lastTransactionStatus = $"Withdrawal Failed - Insufficient Funds. Fee Applied: -${actualFee:F2}";
                 transactionHistory.Add($"Failed Withdrawal: -${amount}, Fee: -${actualFee:F2}, Balance: ${balance}");
-                return false;
+                throw new InsufficientFundsException($"Investment account withdrawal failed. Requested ${amount:F2}, available ${balance + actualFee:F2}. Failure fee ${actualFee:F2} has been applied.");
             }
 
             balance -= amount;
